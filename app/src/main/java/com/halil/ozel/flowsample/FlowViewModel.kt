@@ -5,7 +5,9 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 /**
@@ -25,6 +27,7 @@ class FlowViewModel : ViewModel() {
 
     init {
         collectInViewModel()
+        onEachViewModel()
     }
 
     private fun collectInViewModel() {
@@ -39,5 +42,11 @@ class FlowViewModel : ViewModel() {
                     println("counter is : $it")
                 }
         }
+    }
+
+    private fun onEachViewModel() {
+        countDownTimerFlow.onEach {
+            println(it)
+        }.launchIn(viewModelScope)
     }
 }
