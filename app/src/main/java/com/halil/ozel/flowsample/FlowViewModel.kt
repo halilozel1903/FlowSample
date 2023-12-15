@@ -3,6 +3,7 @@ package com.halil.ozel.flowsample
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
@@ -28,6 +29,7 @@ class FlowViewModel : ViewModel() {
     init {
         collectInViewModel()
         onEachViewModel()
+        getLastValueViewModel()
     }
 
     private fun collectInViewModel() {
@@ -48,5 +50,14 @@ class FlowViewModel : ViewModel() {
         countDownTimerFlow.onEach {
             println(it)
         }.launchIn(viewModelScope)
+    }
+
+    private fun getLastValueViewModel() {
+        viewModelScope.launch {
+            countDownTimerFlow.collectLatest {
+                delay(2000)
+                println("counter is : $it")
+            }
+        }
     }
 }
